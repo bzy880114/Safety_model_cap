@@ -32,7 +32,8 @@ sys.path.append("..")
 
 # What model to download.
 #MODEL_NAME = 'frozen_inference_graph_ssd_m_v1'
-MODEL_NAME = 'frozen_inference_graph_ssd_m_v2'
+#MODEL_NAME = 'frozen_inference_graph_ssd_m_v2'
+MODEL_NAME = 'frozen_inference_graph_ssd_m_v1_3'
 #MODEL_NAME = 'frozen_inference_graph_frcnn_inception'
 #MODEL_NAME = 'ssd_mobilenet_v1_coco'
 
@@ -63,8 +64,8 @@ label_map = label_map_util.load_labelmap(PATH_TO_LABELS)
 categories = label_map_util.convert_label_map_to_categories(label_map, max_num_classes=NUM_CLASSES,
                                                             use_display_name=True)
 category_index = label_map_util.create_category_index(categories)
-category_index[1]['name']=u'安全帽'
-category_index[2]['name']=u'无安全帽'
+category_index[1]['name']=u'无安全帽'
+category_index[2]['name']=u'安全帽'
 
 # connect to pgsql 
 def connect_to_pgsql(path):
@@ -124,10 +125,15 @@ def detect_result_to_pgsql(scores, classes, category_index, video_id, conn):
 config = tf.ConfigProto()
 config.gpu_options.allow_growth = True
 config.allow_soft_placement=True
-config.gpu_options.per_process_gpu_memory_fraction = 0.7
+config.gpu_options.per_process_gpu_memory_fraction = 0.3
 
 if __name__ == '__main__':
-    cap = cv2.VideoCapture('rtsp://admin:QACXNT@10.0.1.106:554/h264/ch1/main/av_stream')
+#    cap = cv2.VideoCapture('rtsp://admin:QACXNT@10.0.1.106:554/h264/ch1/sub/av_stream')   
+#    cap = cv2.VideoCapture('rtmp://rtmp.open.ys7.com/openlive/0e6ccd31425949c88c4709b1a1b44aa7')
+#    cap = cv2.VideoCapture('https://picserver2.oss-cn-hangzhou.aliyuncs.com/videos/201808/37933813_1799736333450272_2178556246032908288_n.mp4')
+    cap = cv2.VideoCapture('rtmp://rtmp.open.ys7.com/openlive/f01c46bc25e3425390a6965838e7cdfe')
+#    cap = cv2.VideoCapture(r'C:\Users\sgs4167\Desktop\windows_v1.5.1\Ironworkers.mp4')
+#    cap = cv2.VideoCapture(r'C:\Users\sgs4167\Desktop\windows_v1.5.1\vtest.avi')
     #cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1080)
     #cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
     size = (int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)), int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)))
@@ -193,18 +199,19 @@ if __name__ == '__main__':
                         line_thickness=2)
                     image_np = cv2.cvtColor(image_np, cv2.COLOR_RGB2BGR)
                     proc.stdin.write(image_np.tobytes())
-                    cv2.imshow("frame",image_np)
+#                    cv2.imshow("frame",image_np)
                     
 #                    if (_numFrames%50 == 0):
 #                        detect_result_to_pgsql(scores, classes, category_index, '1', conn)
 #                    _numFrames += 1    
-                    print('[INFO] elapsed time: {:.2f}'.format(time.time() - t))
+#                    print('[INFO] elapsed time: {:.2f}'.format(time.time() - t))
                     
                     if cv2.waitKey(1) & 0xFF == ord('q'):
                         break
                 else:
                     print('结束时间：',time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()))
-                    break
+                    cap = cv2.VideoCapture('rtmp://rtmp.open.ys7.com/openlive/f01c46bc25e3425390a6965838e7cdfe')
+#                    break
         conn.close()
         proc.stdin.close()
         cap.release()

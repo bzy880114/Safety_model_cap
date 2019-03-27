@@ -33,7 +33,7 @@ from object_detection.utils import label_map_util
 from object_detection.utils import visualization_utils as vis_util
  
 # What model to download.
-MODEL_NAME = 'frozen_inference_graph_ssd_m_v2'
+MODEL_NAME = 'frozen_inference_graph_ssd_m_v1_2'
 #MODEL_NAME = 'frozen_inference_graph_ssd_m_v1'
 #MODEL_NAME = 'frozen_inference_graph_frcnn_inception'
 #MODEL_NAME = 'ssd_mobilenet_v1_coco'
@@ -58,8 +58,8 @@ label_map = label_map_util.load_labelmap(PATH_TO_LABELS)
 categories = label_map_util.convert_label_map_to_categories(label_map, max_num_classes=NUM_CLASSES,
                                                             use_display_name=True)
 category_index = label_map_util.create_category_index(categories)
-category_index[1]['name']=u'安全帽'
-category_index[2]['name']=u'无安全帽'
+category_index[1]['name']=u'无安全帽'
+category_index[2]['name']=u'安全帽'
 #category_index[1]['name']=u'行人'
 #category_index[76]['name']=u'键盘'
 #category_index[64]['name']=u'盆摘'
@@ -149,7 +149,7 @@ def detect_objects(image_np, sess, detection_graph):
         np.squeeze(scores),
         category_index,
         use_normalized_coordinates=True,
-        line_thickness=8)
+        line_thickness=1)
     return (image_np,classes,scores)
 
 
@@ -187,7 +187,7 @@ def load_image_into_numpy_array(image):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-src', '--source', dest='video_source', type=str,
-                        default='rtsp://admin:QACXNT@10.0.1.106:554/h264/ch1/sub/av_stream', help='Device index of the camera.')
+                        default='rtmp://rtmp.open.ys7.com/openlive/af3e3230f4da4201bb71a5b0da68e034', help='Device index of the camera.')
     parser.add_argument('-wd', '--width', dest='width', type=int,
                         default=480, help='Width of the frames in the video stream.')
     parser.add_argument('-ht', '--height', dest='height', type=int,
@@ -233,11 +233,11 @@ if __name__ == '__main__':
     proc = put_to_rtmp(rtmpUrl, sizeStr ,fps_num)
     
     fps = FPS().start()
-    try:
-        conn = connect_to_pgsql(PATH_TO_PGSQL)
-        print('Connect to PGSQL success!')
-    except Exception as e:
-        print('PGSQL connect error:',e) 
+#    try:
+#        conn = connect_to_pgsql(PATH_TO_PGSQL)
+#        print('Connect to PGSQL success!')
+#    except Exception as e:
+#        print('PGSQL connect error:',e) 
     # 视频存档
 #    fourcc = cv2.VideoWriter_fourcc(*'XVID')
 #    out = cv2.VideoWriter('./out.avi', fourcc, fps_num, size)
@@ -274,7 +274,7 @@ if __name__ == '__main__':
     print('[INFO] elapsed time (total): {:.2f}'.format(fps.elapsed()))
     print('[INFO] approx. FPS: {:.2f}'.format(fps.fps()))     
 
-    conn.close()
+#    conn.close()
     proc.stdin.close()
     pool.terminate()
     pool.join()
