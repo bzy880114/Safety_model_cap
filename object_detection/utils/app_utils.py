@@ -56,10 +56,15 @@ class WebcamVideoStream:
         # be stopped
         self.stopped = False
 
+#    def start(self):
+#        # start the thread to read frames from the video stream
+#        Thread(target=self.update, args=()).start()
+#        return self
+        
     def start(self):
         # start the thread to read frames from the video stream
         Thread(target=self.update, args=()).start()
-        return self
+        return self      
 
     def update(self):
         # keep looping infinitely until the thread is stopped
@@ -67,9 +72,10 @@ class WebcamVideoStream:
             # if the thread indicator variable is set, stop the thread
             if self.stopped:
                 return
-
+            
             # otherwise, read the next frame from the stream
             (self.grabbed, self.frame) = self.stream.read()
+
 
     def read(self):
         # return the frame most recently read
@@ -85,7 +91,7 @@ class WebcamVideoStream:
 
 def standard_colors():
     colors = [
-        'AliceBlue', 'Chartreuse', 'Aqua', 'Aquamarine', 'Azure', 'Beige', 'Bisque',
+        'Green', 'Red', 'AliceBlue', 'Chartreuse', 'Aqua', 'Aquamarine', 'Azure', 'Beige', 'Bisque',
         'BlanchedAlmond', 'BlueViolet', 'BurlyWood', 'CadetBlue', 'AntiqueWhite',
         'Chocolate', 'Coral', 'CornflowerBlue', 'Cornsilk', 'Crimson', 'Cyan',
         'DarkCyan', 'DarkGoldenRod', 'DarkGrey', 'DarkKhaki', 'DarkOrange',
@@ -103,7 +109,7 @@ def standard_colors():
         'NavajoWhite', 'OldLace', 'Olive', 'OliveDrab', 'Orange', 'OrangeRed',
         'Orchid', 'PaleGoldenRod', 'PaleGreen', 'PaleTurquoise', 'PaleVioletRed',
         'PapayaWhip', 'PeachPuff', 'Peru', 'Pink', 'Plum', 'PowderBlue', 'Purple',
-        'Red', 'RosyBrown', 'RoyalBlue', 'SaddleBrown', 'Green', 'SandyBrown',
+        'RosyBrown', 'RoyalBlue', 'SaddleBrown', 'SandyBrown',
         'SeaGreen', 'SeaShell', 'Sienna', 'Silver', 'SkyBlue', 'SlateBlue',
         'SlateGray', 'SlateGrey', 'Snow', 'SpringGreen', 'SteelBlue', 'GreenYellow',
         'Teal', 'Thistle', 'Tomato', 'Turquoise', 'Violet', 'Wheat', 'White',
